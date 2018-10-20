@@ -170,8 +170,12 @@ module TodoItem = {
           |> String.concat(" ");
         <li className>
           <div className="view">
-            <input type_="checkbox" className="toggle" checked={todo.completed}
-            onChange=((_) => dispatch(ToggleItem(todo.id)))/>
+            <input
+              type_="checkbox"
+              className="toggle"
+              checked={todo.completed}
+              onChange={_ => dispatch(ToggleItem(todo.id))}
+            />
             <label onDoubleClick={_event => self.send(Edit)}>
               {ReasonReact.string(todo.text)}
             </label>
@@ -187,8 +191,7 @@ module TodoItem = {
             onBlur={_event => self.send(Submit)}
             onChange={event => self.send(Change(valueFromEvent(event)))}
             onKeyDown={
-              event =>
-                self.send(KeyDown(ReactEvent.Keyboard.which(event)))
+              event => self.send(KeyDown(ReactEvent.Keyboard.which(event)))
             }
           />
         </li>;
@@ -212,9 +215,13 @@ module TodoList = {
         List.length(List.filter(todo => todo.completed, todos));
       let activeTodoCount = todoCount - completedCount;
       <section className="main">
-        <input type_="checkbox" className="toggle-all" id="toggle-all"
+        <input
+          type_="checkbox"
+          className="toggle-all"
+          id="toggle-all"
           checked={todoCount > 0 && activeTodoCount === 0}
-          onChange=(_ => dispatch(ToggleAll(activeTodoCount > 0))) />
+          onChange={_ => dispatch(ToggleAll(activeTodoCount > 0))}
+        />
         <label htmlFor="toggle-all">
           {ReasonReact.string("Mark all as complete")}
         </label>
@@ -234,14 +241,20 @@ module TodoInput = {
     initialState: () => "",
     reducer: (newText, _text) => ReasonReact.Update(newText),
     render: self =>
-      <input type_="text" className="new-todo" value=self.state
-        placeholder="What needs to be done?" autoFocus=true
-        onChange=(evt => self.send(valueFromEvent(evt)))
-        onKeyDown=(evt =>
+      <input
+        type_="text"
+        className="new-todo"
+        value={self.state}
+        placeholder="What needs to be done?"
+        autoFocus=true
+        onChange={evt => self.send(valueFromEvent(evt))}
+        onKeyDown={
+          evt =>
             if (ReactEvent.Keyboard.key(evt) == "Enter") {
               onSubmit(self.state);
               self.send("");
-            })
+            }
+        }
       />,
   };
 };
