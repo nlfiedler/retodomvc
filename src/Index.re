@@ -85,13 +85,7 @@ module StoreProvider = {
   let make = Reductive.Provider.createMake(store);
 };
 
-/*
- * For a more recent version of reason-react, use this:
- *
- * let valueFromEvent = evt: string => ReactEvent.Form.target(evt)##value;
- */
-let valueFromEvent = evt: string =>
-  (evt |> ReactEventRe.Form.target |> ReactDOMRe.domElementToObj)##value;
+let valueFromEvent = evt: string => ReactEvent.Form.target(evt)##value;
 
 module TodoItem = {
   type state = {
@@ -176,19 +170,8 @@ module TodoItem = {
           |> String.concat(" ");
         <li className>
           <div className="view">
-            {
-              /* cannot set type_ with this version of reason-react? */
-              ReasonReact.createDomElement(
-                "input",
-                ~props={
-                  "className": "toggle",
-                  "type": "checkbox",
-                  "checked": todo.completed,
-                  "onChange": _ => dispatch(ToggleItem(todo.id)),
-                },
-                [||],
-              )
-            }
+            <input type_="checkbox" className="toggle" checked={todo.completed}
+            onChange=((_) => dispatch(ToggleItem(todo.id)))/>
             <label onDoubleClick={_event => self.send(Edit)}>
               {ReasonReact.string(todo.text)}
             </label>
@@ -205,7 +188,7 @@ module TodoItem = {
             onChange={event => self.send(Change(valueFromEvent(event)))}
             onKeyDown={
               event =>
-                self.send(KeyDown(ReactEventRe.Keyboard.which(event)))
+                self.send(KeyDown(ReactEvent.Keyboard.which(event)))
             }
           />
         </li>;
@@ -229,20 +212,9 @@ module TodoList = {
         List.length(List.filter(todo => todo.completed, todos));
       let activeTodoCount = todoCount - completedCount;
       <section className="main">
-        {
-          /* cannot set type_ with this version of reason-react? */
-          ReasonReact.createDomElement(
-            "input",
-            ~props={
-              "className": "toggle-all",
-              "id": "toggle-all",
-              "type": "checkbox",
-              "onChange": _ => dispatch(ToggleAll(activeTodoCount > 0)),
-              "checked": todoCount > 0 && activeTodoCount === 0,
-            },
-            [||],
-          )
-        }
+        <input type_="checkbox" className="toggle-all" id="toggle-all"
+          checked={todoCount > 0 && activeTodoCount === 0}
+          onChange=(_ => dispatch(ToggleAll(activeTodoCount > 0))) />
         <label htmlFor="toggle-all">
           {ReasonReact.string("Mark all as complete")}
         </label>
@@ -262,24 +234,15 @@ module TodoInput = {
     initialState: () => "",
     reducer: (newText, _text) => ReasonReact.Update(newText),
     render: self =>
-      /* cannot set type_ with this version of reason-react? */
-      ReasonReact.createDomElement(
-        "input",
-        ~props={
-          "className": "new-todo",
-          "type": "text",
-          "value": self.state,
-          "placeholder": "What needs to be done?",
-          "onChange": evt => self.send(valueFromEvent(evt)),
-          "onKeyDown": evt =>
-            if (ReactEventRe.Keyboard.key(evt) == "Enter") {
+      <input type_="text" className="new-todo" value=self.state
+        placeholder="What needs to be done?" autoFocus=true
+        onChange=(evt => self.send(valueFromEvent(evt)))
+        onKeyDown=(evt =>
+            if (ReactEvent.Keyboard.key(evt) == "Enter") {
               onSubmit(self.state);
               self.send("");
-            },
-          "autoFocus": true,
-        },
-        [||],
-      ),
+            })
+      />,
   };
 };
 
