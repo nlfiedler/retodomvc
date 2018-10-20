@@ -1,5 +1,7 @@
 {
   "name": "retodomvc",
+  "description": "TodoMVC written in ReasonML and using ReasonReact.",
+  "homepage": "https://github.com/nlfiedler/retodomvc",
   "version": "0.1.0",
   "scripts": {
     "build": "bsb -make-world",
@@ -10,14 +12,21 @@
     "webpack:production": "NODE_ENV=production webpack"
   },
   "keywords": [
-    "BuckleScript"
+    "todomvc",
+    "reductive",
+    "reasonml",
+    "bucklescript"
   ],
-  "author": "",
+  "author": {
+    "name": "Nathan Fiedler",
+    "email": "nathanfiedler@fastmail.fm"
+  },
   "license": "MIT",
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "reason-react": ">=0.4.0"
+    "reason-react": "0.4.2",
+    "reductive": "nlfiedler/reductive#upgrade"
   },
   "devDependencies": {
     "bs-platform": "^4.0.6",
